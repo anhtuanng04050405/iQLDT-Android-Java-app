@@ -1,21 +1,14 @@
 package com.example.iQLDT;
 
 public class item {
-    private String url, tieude, thoigian, diadiem;
+    private String url, tieude, thoigian, diadiem, noidung;
 
-    public item(String url, String tieude, String thoigian, String diadiem) {
+    public item(String url, String tieude, String thoigian, String diadiem, String noidung) {
         this.url = url;
         this.tieude = tieude;
         this.thoigian = thoigian;
         this.diadiem = diadiem;
-    }
-
-    public String getTieude() {
-        return tieude;
-    }
-
-    public void setTieude(String tieude) {
-        this.tieude = tieude;
+        this.noidung = noidung;
     }
 
     public String getUrl() {
@@ -24,6 +17,14 @@ public class item {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTieude() {
+        return tieude;
+    }
+
+    public void setTieude(String tieude) {
+        this.tieude = tieude;
     }
 
     public String getThoigian() {
@@ -40,5 +41,13 @@ public class item {
 
     public void setDiadiem(String diadiem) {
         this.diadiem = diadiem;
+    }
+
+    public String getNoidung() {
+        return noidung;
+    }
+
+    public void setNoidung(String noidung) {
+        this.noidung = noidung;
     }
 }

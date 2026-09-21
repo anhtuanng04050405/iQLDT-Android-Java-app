@@ -1,5 +1,6 @@
 package com.example.iQLDT;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,50 +73,48 @@ public class trangchu extends Fragment {
     }
 
     private void loadDataFromApi() {
-        RetrofitClient.getApiService().getPosts().enqueue(new Callback<PostResponse>() {
+        DataRepository.getInstance().getData(new DataRepository.OnDataLoadedListener() {
             @Override
-            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<item_api> apiList = response.body().getData();
-                    if (apiList != null && !apiList.isEmpty()) {
-                        apiItemList.clear();
-                        apiItemList.addAll(apiList);
+            public void onSuccess(List<item_api> apiList) {
+                if (!isAdded()) return;
+                if (!apiList.isEmpty()) {
+                    apiItemList.clear();
+                    apiItemList.addAll(apiList);
 
-                        itemList.clear();
-                        for (item_api apiItem : apiList) {
-                            String url      = apiItem.getPost_hinhanhminhhoa();
-                            String tieude   = apiItem.getPost_tieude();
-                            String gioKetThuc = (apiItem.getPost_gioketthuc() != null && !apiItem.getPost_gioketthuc().trim().isEmpty())
-                                    ? apiItem.getPost_gioketthuc() : apiItem.getPost_giobatdau();
-                            String thoigian = apiItem.getPost_giobatdau() + " " + apiItem.getPost_batdau() + " - " + gioKetThuc + " "  + apiItem.getPost_ketthuc();
-                            String diadiem  = apiItem.getPost_diadiem();
+                    itemList.clear();
+                    for (item_api apiItem : apiList) {
+                        String url      = apiItem.getPost_hinhanhminhhoa();
+                        String tieude   = apiItem.getPost_tieude();
+                        String gioKetThuc = (apiItem.getPost_gioketthuc() != null && !apiItem.getPost_gioketthuc().trim().isEmpty())
+                                ? apiItem.getPost_gioketthuc() : apiItem.getPost_giobatdau();
+                        String thoigian = apiItem.getPost_giobatdau() + " " + apiItem.getPost_batdau() + " - " + gioKetThuc + " " + apiItem.getPost_ketthuc();
+                        String diadiem  = apiItem.getPost_diadiem();
+                        String noidung  = apiItem.getPost_noidung();
 
-                            itemList.add(new item(url, tieude, thoigian, diadiem));
-                        }
-                        adapter.notifyDataSetChanged();
-                        indicator.setViewPager(viewPager2);
-
-                        // Cập nhật trạng thái cho sự kiện đầu tiên
-                        updateEventStatus(viewPager2.getCurrentItem());
+                        itemList.add(new item(url, tieude, thoigian, diadiem, noidung));
                     }
+                    adapter.notifyDataSetChanged();
+                    indicator.setViewPager(viewPager2);
+                    updateEventStatus(viewPager2.getCurrentItem());
 
                     adapter.setOnItemClickListener(new item_adapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(item item, int position) {
-                            String tieuDe = item.getTieude();
-                            Toast.makeText(requireContext(), "Bạn vừa bấm vào item: " + position + " - " + tieuDe, Toast.LENGTH_SHORT).show();
+                            Intent hienthibaiviet = new Intent(getContext(), hienthibaiviet.class);
+                            hienthibaiviet.putExtra("tieude", item.getTieude());
+                            hienthibaiviet.putExtra("thoigian", item.getThoigian());
+                            hienthibaiviet.putExtra("diadiem", item.getDiadiem());
+                            hienthibaiviet.putExtra("url", item.getUrl());
+                            hienthibaiviet.putExtra("noidung", item.getNoidung());
+                            startActivity(hienthibaiviet);
                         }
                     });
-
-                }
-                else {
-                    Log.e("trangchu", "API lỗi: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<PostResponse> call, Throwable t) {
-                Log.e("trangchu", "Gọi API thất bại: " + t.getMessage());
+            public void onFailure(String errorMessage) {
+                Log.e("trangchu", errorMessage);
             }
         });
     }
@@ -141,7 +140,6 @@ public class trangchu extends Fragment {
         Date now = calendar.getTime();
 
         if (endDate != null && now.after(endDate)) {
-                    // Hết thời gian -> Đã kết thúc và màu đỏ
                     tvTrangThai.setText("- Đã kết thúc -");
                     if (isAdded()) {
                         tvTrangThai.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_ended));
@@ -149,17 +147,7 @@ public class trangchu extends Fragment {
                         tvTrangThai.setTextColor(Color.parseColor("#E53935"));
             }
         }
-        else if (startDate != null && now.before(startDate)) {
-            // Chưa đến thời gian -> Sắp diễn ra
-            tvTrangThai.setText("- Sắp diễn ra -");
-            if (isAdded()) {
-                tvTrangThai.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_upcoming));
-            } else {
-                tvTrangThai.setTextColor(Color.parseColor("#FF9800"));
-            }
-        }
         else {
-            // Trong thời gian diễn ra -> Đang diễn ra và màu xanh lá cây
             tvTrangThai.setText("- Đang diễn ra -");
             if (isAdded()) {
                 tvTrangThai.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_ongoing));

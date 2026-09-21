@@ -74,7 +74,7 @@ public class item_adapter extends RecyclerView.Adapter<item_adapter.ItemViewHold
 
             imgBanner = itemView.findViewById(R.id.banner);
             tvTitle = itemView.findViewById(R.id.tieude);
-            tvTime = itemView.findViewById(R.id.thoigian);
+            tvTime = itemView.findViewById(R.id.diadiem);
             tvLocation = itemView.findViewById(R.id.diadiem);
         }
     }
