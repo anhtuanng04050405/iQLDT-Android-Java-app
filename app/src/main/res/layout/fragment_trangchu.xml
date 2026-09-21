@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Chào"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textView"
+        android:layout_toEndOf="@id/textView"
+        android:text="Nguyễn Anh Tuấn"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chúc bạn một ngày tốt lành!"
+        android:layout_below="@id/textView"
+        android:layout_marginStart="10dp"/>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/textView3"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="#E96F6F" />
+
+    <TextView
+        android:id="@+id/trangthai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Đang diễn ra -"
+        android:layout_below="@id/divider1"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="2dp"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/trangthai"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"/>
+
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignBottom="@id/viewPager2"
+        android:layout_centerInParent="true"/>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/viewPager2"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="#E96F6F" />
+
+</RelativeLayout>
